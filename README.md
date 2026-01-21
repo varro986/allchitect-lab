@@ -7,7 +7,7 @@ This repository serves as the technical extension of my Substack, [Allchitect](h
 Here, I host code snippets, examples or whatever.
 
 ## Connect
-- **Newsletter:** [Allchitect Substack](https://allchitect.substack.com/)
+- **Newsletter:** [Substack](https://allchitect.substack.com/)
 - **Professional:** [LinkedIn](https://www.linkedin.com/in/vvalrosso/)
 
 ---
