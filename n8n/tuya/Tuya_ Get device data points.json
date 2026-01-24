@@ -1,0 +1,409 @@
+{
+  "name": "Tuya: Get device data points",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "069cd5b9-2647-4076-b9f0-c5f87eee13be",
+              "name": "access_id",
+              "value": "={{ $items(\"Get tuya configs\").find(item => item.json.Key === 'tuya_client_id').json.Value }}",
+              "type": "string"
+            },
+            {
+              "id": "df906480-86be-4c7b-a5e8-7ddb598b1f7b",
+              "name": "access_secret",
+              "value": "={{ $items(\"Get tuya configs\").find(item => item.json.Key === 'tuya_client_secret').json.Value }}",
+              "type": "string"
+            },
+            {
+              "id": "ca3a7ad0-debe-4886-b316-58ed51c1e9cf",
+              "name": "baseUrl",
+              "value": "={{ $items(\"Get tuya configs\").find(item => item.json.Key === 'tuya_baseUrl').json.Value }}",
+              "type": "string"
+            },
+            {
+              "id": "e0c2535f-1d86-45c1-af1e-b0a18d3af18c",
+              "name": "t",
+              "value": "={{ Date.now() }}",
+              "type": "string"
+            },
+            {
+              "id": "3bb4d608-c8a6-427e-bed3-5a72990f9fe6",
+              "name": "httpMethod",
+              "value": "GET",
+              "type": "string"
+            },
+            {
+              "id": "67534822-2b89-4055-9902-0fab42e496c2",
+              "name": "relativeUrl",
+              "value": "=/v1.0/devices/{{ $('Calling Workflow').item.json.device_id }}/status",
+              "type": "string"
+            },
+            {
+              "id": "e32bcabb-d569-474b-ab1c-58ff89065ac3",
+              "name": "body",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "c5253626-86fc-4686-85b4-6b5aa7a7db92",
+              "name": "access_token",
+              "value": "={{ $('Calling Workflow').item.json.access_token }}",
+              "type": "string"
+            },
+            {
+              "id": "6e739469-0abc-4a69-acff-e44c69439e65",
+              "name": "device_id",
+              "value": "={{ $('Calling Workflow').item.json.device_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        32
+      ],
+      "id": "c00b73f7-41b0-45f0-925e-15eca733226e",
+      "name": "Init",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "value": "={{ $json.body }}",
+        "dataPropertyName": "hash_body"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        176,
+        32
+      ],
+      "id": "5ed94420-1f4f-467b-a2f0-8a9f3381aa3f",
+      "name": "Hash body empty",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.string_to_sign }}",
+        "dataPropertyName": "signature",
+        "secret": "={{ $json.access_secret }}"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        848,
+        32
+      ],
+      "id": "a185a280-6282-4d46-a0c7-c69c32b9d929",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "sJSj6RhQbEODoCRL",
+          "mode": "list",
+          "cachedResultName": "Configs",
+          "cachedResultUrl": "/projects/Enln3fb9c022j0uw/datatables/sJSj6RhQbEODoCRL"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Key",
+              "keyValue": "tuya_baseUrl"
+            },
+            {
+              "keyName": "Key",
+              "keyValue": "tuya_client_id"
+            },
+            {
+              "keyName": "Key",
+              "keyValue": "tuya_client_secret"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        32
+      ],
+      "id": "22494fb7-e3e8-4cf5-90e4-dc3e34cafff7",
+      "name": "Get tuya configs",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61405700-f3c9-416c-a429-6db24e97e341",
+              "name": "string_to_sign",
+              "value": "={{ $json.access_id.trim() }}{{ $json.access_token.trim() }}{{ $json.t.trim() }}{{ $json.signUrl.trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        624,
+        32
+      ],
+      "id": "b3bc0462-3100-411f-877f-5acfaf294826",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cdba1cee-d573-4f43-924d-f39b7cdbb87b",
+              "name": "signUrl",
+              "value": "={{ $json.httpMethod }}\n{{ $json.hash_body }}\n\n{{ $json.relativeUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        32
+      ],
+      "id": "ebe40111-1444-43e6-b353-e716de01ad35",
+      "name": "signUrl"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.baseUrl }}{{ $json.relativeUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "client_id",
+              "value": "={{ $json.access_id }}"
+            },
+            {
+              "name": "sign",
+              "value": "={{ $json.signature.toUpperCase() }}"
+            },
+            {
+              "name": "t",
+              "value": "={{ $json.t }}"
+            },
+            {
+              "name": "sign_method",
+              "value": "HMAC-SHA256"
+            },
+            {
+              "name": "access_token",
+              "value": "={{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1072,
+        32
+      ],
+      "id": "a241ce97-449c-4a33-a770-180a8b7e1cec",
+      "name": "HTTP Request Get device data points"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "access_token"
+            },
+            {
+              "name": "device_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        32
+      ],
+      "id": "6becc616-e259-4f2b-86c2-c27320aac13b",
+      "name": "Calling Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dec43322-dfe1-42ed-b242-f7899e1c3386",
+              "name": "result",
+              "value": "={{ $json.result }}",
+              "type": "string"
+            },
+            {
+              "id": "179b57a6-08cc-452e-a375-61e8b933fb96",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1296,
+        32
+      ],
+      "id": "02f364fd-5324-4cbc-b74e-07d47e1211f5",
+      "name": "Clean output"
+    }
+  ],
+  "pinData": {
+    "Calling Workflow": [
+      {
+        "json": {
+          "access_token": null,
+          "device_id": null
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Init": {
+      "main": [
+        [
+          {
+            "node": "Hash body empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash body empty": {
+      "main": [
+        [
+          {
+            "node": "signUrl",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Get device data points",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get tuya configs": {
+      "main": [
+        [
+          {
+            "node": "Init",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "signUrl": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Get device data points": {
+      "main": [
+        [
+          {
+            "node": "Clean output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calling Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get tuya configs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "5652c9f2-3eda-4e21-86ef-08810f90fe9e",
+  "meta": {
+    "instanceId": "3925f173e8cd2d6118234946561e074191b6fa651e57d50986c498491cb14d3e"
+  },
+  "id": "fHEv8e7UP1WbsTY8f2uT6",
+  "tags": [
+    {
+      "updatedAt": "2026-01-10T15:12:28.106Z",
+      "createdAt": "2026-01-10T15:12:28.106Z",
+      "id": "3t0mErYkS3QMM9Sv",
+      "name": "tuya"
+    },
+    {
+      "updatedAt": "2026-01-10T15:12:23.351Z",
+      "createdAt": "2026-01-10T12:29:20.643Z",
+      "id": "p5HkyRKf8GBs6DDi",
+      "name": "subflow"
+    }
+  ]
+}

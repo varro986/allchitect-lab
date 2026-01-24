@@ -1,0 +1,187 @@
+{
+  "name": "Loki: Push Log",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "WorkFlow Name"
+            },
+            {
+              "name": "Level"
+            },
+            {
+              "name": "Message"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -160
+      ],
+      "id": "8a555558-9de9-4776-86fc-5d766a17a012",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Recupero i dati in modo sicuro (evito null)\nvar msg = ($input.first().json.Message || \"empty\").toString();\nvar lvl = ($input.first().json.Level || \"info\").toString();\nvar wf  = ($input.first().json[\"WorkFlow Name\"] || \"unknown\").toString();\n\n// 2. Genero il timestamp in nanosecondi\nvar ts = (Date.now() * 1000000).toString();\n\n// 3. Restituisco la struttura DIRETTA (senza loki_body)\nreturn {\n  loki_body: \n  {\n    streams: [\n    {\n      stream: {\n        job: \"n8n\",\n        level: lvl,\n        workflow: wf\n      },\n      values: [\n        [ts, msg] // Entrambi sono ora stringhe garantite\n      ]\n    }\n  ]\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -64
+      ],
+      "id": "6df428a3-bfb8-41f9-a9b1-1021fd2550b9",
+      "name": "Generate Body"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "sJSj6RhQbEODoCRL",
+          "mode": "list",
+          "cachedResultName": "Configs",
+          "cachedResultUrl": "/projects/Enln3fb9c022j0uw/datatables/sJSj6RhQbEODoCRL"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Key",
+              "keyValue": "loki_baseUrl"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        -256
+      ],
+      "id": "603eccca-cb5c-4f06-9874-9500962b3d26",
+      "name": "Get loki configs",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.Value }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.loki_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        672,
+        -160
+      ],
+      "id": "c0cc48b1-3c93-4dd1-a1d6-59bb190df0a4",
+      "name": "HTTP Request",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        -160
+      ],
+      "id": "033ed7b2-0b92-436e-a4d7-23046578cd92",
+      "name": "Merge"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get loki configs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get loki configs": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Body": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "76d31f19-6fed-4565-ac9f-6e876f8ace48",
+  "meta": {
+    "instanceId": "3925f173e8cd2d6118234946561e074191b6fa651e57d50986c498491cb14d3e"
+  },
+  "id": "NuEHg10VS1cVEq885Rul9",
+  "tags": [
+    {
+      "updatedAt": "2026-01-17T11:26:03.992Z",
+      "createdAt": "2026-01-17T11:26:03.992Z",
+      "id": "dMTIBsxQN60qeSss",
+      "name": "loki"
+    },
+    {
+      "updatedAt": "2026-01-10T15:12:23.351Z",
+      "createdAt": "2026-01-10T12:29:20.643Z",
+      "id": "p5HkyRKf8GBs6DDi",
+      "name": "subflow"
+    }
+  ]
+}
