@@ -1,0 +1,1373 @@
+{
+  "name": "Temperature",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2688,
+        -624
+      ],
+      "id": "ec6cd930-6ebb-421c-8ecc-66a969fca28c",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "boZ2VDnr3xsMZE2MIHVPz",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/boZ2VDnr3xsMZE2MIHVPz",
+          "cachedResultName": "Tuya: Get access_token with simple mode"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2240,
+        -864
+      ],
+      "id": "67313429-83e2-4fc5-8d26-6c6b9a28ae52",
+      "name": "Tuya: Get access_token with simple mode"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fHEv8e7UP1WbsTY8f2uT6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/fHEv8e7UP1WbsTY8f2uT6",
+          "cachedResultName": "Tuya: Get device data points"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "access_token": "={{ $('Tuya: Get access_token with simple mode').item.json.result.access_token }}",
+            "device_id": "={{ $json[\"Device Id\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "access_token",
+              "displayName": "access_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "device_id",
+              "displayName": "device_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1120,
+        -576
+      ],
+      "id": "5a108690-e096-4537-b4b2-ee97b2a19c10",
+      "name": "Tuya: Get device data points",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "latitude",
+              "value": "45.5217"
+            },
+            {
+              "name": "longitude",
+              "value": "9.3109"
+            },
+            {
+              "name": "current",
+              "value": "temperature_2m"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2016,
+        -624
+      ],
+      "id": "a47adff0-94cb-436d-bc4b-0b1b3ec55a86",
+      "name": "HTTP Request to Open Meteo"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.DocId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 503533906,
+          "mode": "list",
+          "cachedResultName": "Devices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM/edit#gid=503533906"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1792,
+        -432
+      ],
+      "id": "161bf8d7-7cfe-43a1-a9d3-089968d8499d",
+      "name": "Get Devices",
+      "credentials": {
+        "googleApi": {
+          "id": "Moo5cysToVu6PocY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1792,
+        -672
+      ],
+      "id": "6ed9a1e6-2196-4fe4-bb71-35b29ab52305",
+      "name": "Merge Transaction Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "caf26c73-bffa-4b0b-95df-dc563744d49e",
+              "name": "Tuya Access Token",
+              "value": "={{ $json.result.access_token }}",
+              "type": "string"
+            },
+            {
+              "id": "ee8dfade-c75c-429c-9e1e-4f69b5dd7a63",
+              "name": "Tuya Access Token Request Result",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "641e7dd3-5255-4263-9489-d31b25a44c93",
+              "name": "External Temperature",
+              "value": "={{ $json.current.temperature_2m }}",
+              "type": "number"
+            },
+            {
+              "id": "d8215905-319c-4e03-9f2d-cd06b2bb2541",
+              "name": "Execution Time",
+              "value": "={{ $now.setZone('Europe/Rome').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1568,
+        -672
+      ],
+      "id": "46718ec3-1867-41e8-b847-9f38688a55a7",
+      "name": "Filter Transactional Data"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1344,
+        -576
+      ],
+      "id": "29c86432-fcc2-4fc8-a275-fd4e92b8065e",
+      "name": "Merge Execution Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "20a57f22-26a8-4f99-9a3f-bae7ea4ba348",
+              "name": "Device Name",
+              "value": "={{ $json[\"Device Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "44c28de6-acb7-403f-9327-0aa88494348e",
+              "name": "Device Brand",
+              "value": "={{ $json[\"Device Brand\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "3f738d35-61a9-4324-9380-465760ec8add",
+              "name": "Device Type",
+              "value": "={{ $json[\"Device Type\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "c18332b0-5d03-4223-87fe-4dcc384b2eb1",
+              "name": "Device Id",
+              "value": "={{ $json[\"Device Id\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f049fbed-60c4-4fc3-a376-1a01a299b2bc",
+              "name": "DocId",
+              "value": "={{ $('Set Doc Variables').item.json.DocId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1568,
+        -432
+      ],
+      "id": "c87f9705-6cbd-4084-be55-714e5f648411",
+      "name": "Filter Devices Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "35697328-e123-4ecf-a51f-dd58dce6f03e",
+              "name": "Log DateTime",
+              "value": "={{ $('Merge Execution Data').item.json[\"Execution Time\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "6867813a-c58e-42a0-87ab-b4b96e9f653b",
+              "name": "Device Id",
+              "value": "={{ $('Merge Execution Data').item.json[\"Device Id\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "5995c20e-c02a-4ee1-9d12-d0fbf370afc1",
+              "name": "Device Name",
+              "value": "={{ $('Merge Execution Data').item.json[\"Device Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "aaeaed4d-aa03-47b9-a59c-71c3cc7e461c",
+              "name": "Device Type",
+              "value": "={{ $('Merge Execution Data').item.json[\"Device Type\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "5f9a384d-7282-47bc-b866-3f1f6d40e0c1",
+              "name": "External Temperature",
+              "value": "={{ $('Merge Execution Data').item.json[\"External Temperature\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "d79a163b-0878-428b-828d-4a7d017bff1c",
+              "name": "Tuya Call Success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c5001d7e-6afd-4717-a6c3-d4cf51dfd871",
+              "name": "Tuya Call Result",
+              "value": "={{ $json.result }}",
+              "type": "string"
+            },
+            {
+              "id": "d5e07b09-e471-4f6d-8b29-b65551789fbb",
+              "name": "DocId",
+              "value": "={{ $('Merge Execution Data').item.json.DocId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -896,
+        -576
+      ],
+      "id": "234e5098-bbd9-438f-aed4-ee9f6fa18ffb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Device Type\"] }}",
+                    "rightValue": "Thermostat",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "44070470-4872-406c-9123-d547edf294b7"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4c64553e-7fd2-4354-b1cd-35dfa38b5cfd",
+                    "leftValue": "={{ $json[\"Device Type\"] }}",
+                    "rightValue": "Thermometer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        -672
+      ],
+      "id": "d0be6b15-9d0a-490c-a9c4-c895ad59035a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e153e1fe-675a-46a9-9e60-beff4ef38958",
+              "leftValue": "={{ $json[\"Tuya Call Success\"] }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -448,
+        -576
+      ],
+      "id": "5df2c7f5-5bae-4202-b584-ca9203360ea9",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.DocId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Log Thermostats",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Log DateTime": "={{ $json[\"Log DateTime\"] }}",
+            "Device Id": "={{ $json[\"Device Id\"] }}",
+            "Device Name": "={{ $json[\"Device Name\"] }}",
+            "Temperature": "={{ JSON.parse($json[\"Tuya Call Result\"]).find(obj => obj.code === 'upper_temp').value / 2 }}",
+            "External Temperature": "={{ $json[\"External Temperature\"] }}",
+            "Set": "={{ JSON.parse($json[\"Tuya Call Result\"]).find(obj => obj.code === 'temp_set').value / 2 }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Log DateTime",
+              "displayName": "Log DateTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Device Id",
+              "displayName": "Device Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Device Name",
+              "displayName": "Device Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Temperature",
+              "displayName": "Temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Set",
+              "displayName": "Set",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "External Temperature",
+              "displayName": "External Temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        -768
+      ],
+      "id": "799d1e57-b2eb-4885-a34c-9468588c0857",
+      "name": "Append in Thermostat",
+      "credentials": {
+        "googleApi": {
+          "id": "Moo5cysToVu6PocY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1358802735,
+          "mode": "list",
+          "cachedResultName": "Log Thermometers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM/edit#gid=1358802735"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Log DateTime": "={{ $json[\"Log DateTime\"] }}",
+            "Device Id": "={{ $json[\"Device Id\"] }}",
+            "Device Name": "={{ $json[\"Device Name\"] }}",
+            "External Temperature": "={{ $json[\"External Temperature\"] }}",
+            "Temperature": "={{ JSON.parse($json[\"Tuya Call Result\"]).find(obj => obj.code === 'va_temperature').value / 10 }}",
+            "Humidity": "={{ JSON.parse($json[\"Tuya Call Result\"]).find(obj => obj.code === 'va_humidity').value }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Log DateTime",
+              "displayName": "Log DateTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Device Id",
+              "displayName": "Device Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Device Name",
+              "displayName": "Device Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Temperature",
+              "displayName": "Temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Humidity",
+              "displayName": "Humidity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "External Temperature",
+              "displayName": "External Temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        -576
+      ],
+      "id": "b935f30f-3c06-4c6d-970c-5f9ab7d39e8f",
+      "name": "Append in Thermometer",
+      "credentials": {
+        "googleApi": {
+          "id": "Moo5cysToVu6PocY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a82a23e5-3c4e-4698-bd83-bb92a5f07eee",
+              "name": "DocId",
+              "value": "1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2016,
+        -432
+      ],
+      "id": "5a84f742-2da9-4908-a355-1a16e93c1798",
+      "name": "Set Doc Variables"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "38df834f-ec58-4f78-8121-784b16ee9bb6",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2016,
+        -864
+      ],
+      "id": "9413861f-f7d5-4b81-881c-ba283e0ab3a0",
+      "name": "If Tuya Access Token"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "830a7f2e-e8b7-4fc2-bb1b-0b3ba5c1d0fa",
+              "leftValue": "={{ $json[\"Device Type\"] }}",
+              "rightValue": "Thermometer",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "3aa6724f-d7d5-4ce7-b574-4b0b655c18ab",
+              "leftValue": "={{ $json[\"Device Type\"] }}",
+              "rightValue": "Thermostat",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -672,
+        -576
+      ],
+      "id": "3b21ab32-b4fc-41fe-b4d3-23e51cf1ff6c",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "error",
+            "Message": "tuya access token gathering failed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1792,
+        -912
+      ],
+      "id": "17b2e5a7-e928-4b46-b806-12cef3d51ada",
+      "name": "ERROR"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "warning",
+            "Message": "=Get data from {{ $json[\"Device Name\"] }} - {{ $json[\"Device Id\"] }} FAILED"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        -384
+      ],
+      "id": "644cc86e-5c2b-4fc5-bd70-d77a42ade8a0",
+      "name": "WARN"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2688,
+        -160
+      ],
+      "id": "37282cb5-811e-444f-9902-9427274c681a",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "error",
+            "Message": "={{ $json.execution.error.message }} - {{ $json.execution.error.stack }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2464,
+        -160
+      ],
+      "id": "c5bb4de5-2b29-4f95-bf46-801fa08719f6",
+      "name": "ERROR Unexpected"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "info",
+            "Message": "BEGIN execution"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2464,
+        -624
+      ],
+      "id": "4cedcf8b-fd54-4d6c-999f-4728e4460d20",
+      "name": "Log BEGIN"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "info",
+            "Message": "END execution"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        -576
+      ],
+      "id": "b2b267b4-8a71-45a4-a54a-4c18fc4d66db",
+      "name": "Log END"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        -592
+      ],
+      "id": "488b94ae-4e5a-4920-94df-bf01a9434ed5",
+      "name": "Merge"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log BEGIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuya: Get access_token with simple mode": {
+      "main": [
+        [
+          {
+            "node": "If Tuya Access Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuya: Get device data points": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request to Open Meteo": {
+      "main": [
+        [
+          {
+            "node": "Merge Transaction Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get Devices": {
+      "main": [
+        [
+          {
+            "node": "Filter Devices Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Transaction Data": {
+      "main": [
+        [
+          {
+            "node": "Filter Transactional Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Transactional Data": {
+      "main": [
+        [
+          {
+            "node": "Merge Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Tuya: Get device data points",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Devices Data": {
+      "main": [
+        [
+          {
+            "node": "Merge Execution Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Append in Thermostat",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append in Thermometer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WARN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Doc Variables": {
+      "main": [
+        [
+          {
+            "node": "Get Devices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Tuya Access Token": {
+      "main": [
+        [
+          {
+            "node": "Merge Transaction Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ERROR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "ERROR Unexpected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append in Thermostat": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append in Thermometer": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Log BEGIN": {
+      "main": [
+        [
+          {
+            "node": "Tuya: Get access_token with simple mode",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request to Open Meteo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Doc Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log END": {
+      "main": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Log END",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WARN": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "7d3debdc-1587-4386-8de3-fafcb8f142aa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3925f173e8cd2d6118234946561e074191b6fa651e57d50986c498491cb14d3e"
+  },
+  "id": "M2DGShqX3T3xPpjB0OcPl",
+  "tags": []
+}
