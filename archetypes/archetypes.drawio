@@ -1,126 +1,98 @@
 <mxfile host="65bd71144e">
     <diagram id="gHu2T59hIzsyRr5O6AHf" name="dfd">
-        <mxGraphModel dx="1111" dy="784" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1392" dy="784" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="2" value="ENTITY" style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
+                <mxCell id="2" value="ENTITY" style="html=1;dashed=0;whitespace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="140" y="40" width="100" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="FLOW" style="endArrow=classic;html=1;" edge="1" parent="1">
+                <mxCell id="3" value="FLOW" style="endArrow=classic;html=1;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="470" y="64.5" as="sourcePoint"/>
-                        <mxPoint x="570" y="64.5" as="targetPoint"/>
+                        <mxPoint x="420" y="64.5" as="sourcePoint"/>
+                        <mxPoint x="520" y="64.5" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5" value="D1&lt;span style=&quot;white-space: pre;&quot;&gt;&#9;&lt;/span&gt;DATA STORE" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.dataStoreID;align=left;spacingLeft=3;points=[[0,0],[0.5,0],[1,0],[0,0.5],[1,0.5],[0,1],[0.5,1],[1,1]];" vertex="1" parent="1">
-                    <mxGeometry x="335" y="820" width="180" height="70" as="geometry"/>
+                <mxCell id="6" value="PROCESS" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="270" y="35" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="PROCESS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="305" y="35" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="15" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="7" target="9">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="19" value="2. Invio comanda" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="15">
-                    <mxGeometry x="-0.2182" y="-1" relative="1" as="geometry">
-                        <mxPoint x="7" y="-11" as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="17" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="7" target="8">
+                <mxCell id="17" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7" target="8" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="380" y="260"/>
+                            <mxPoint x="425" y="260"/>
                             <mxPoint x="190" y="260"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="18" value="3. Conferma ricezione&lt;br&gt;5. Notifica consegna" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="17">
+                <mxCell id="18" value="2. Conferma o Rifiuto" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="17" vertex="1" connectable="0">
                     <mxGeometry x="0.1267" y="-4" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
+                        <mxPoint x="12" y="-6" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7" value="Sistema di ordini" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="350" y="160" width="120" height="60" as="geometry"/>
+                <mxCell id="7" value="[0]&lt;br&gt;Sistema&lt;br&gt;Biblioteca" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="365" y="160" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="1. Invia ordine" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1">
-                    <mxGeometry x="-0.2727" y="10" relative="1" as="geometry">
+                <mxCell id="14" value="1. Richiesta Libro" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1" target="7">
+                    <mxGeometry x="-0.0484" y="10" relative="1" as="geometry">
                         <mxPoint x="241" y="190" as="sourcePoint"/>
                         <mxPoint x="351" y="190" as="targetPoint"/>
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="8" value="Cliente" style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
+                <mxCell id="8" value="Utente" style="html=1;dashed=0;whitespace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="140" y="160" width="100" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="16" value="4. Pizza pronta" style="edgeStyle=none;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="9" target="7">
+                <mxCell id="52" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="54" target="56">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="630" y="260"/>
-                            <mxPoint x="440" y="260"/>
+                            <mxPoint x="395" y="460"/>
+                            <mxPoint x="190" y="460"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="9" value="Cucina" style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="580" y="160" width="100" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="33" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="46" target="30">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="410" y="450" as="sourcePoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="38" value="1b. Controllo disponibilità prodotto" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="33">
-                    <mxGeometry x="0.4727" relative="1" as="geometry">
-                        <mxPoint y="-8" as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="30" value="D1&lt;span style=&quot;white-space: pre;&quot;&gt;&#9;&lt;/span&gt;Catalogo prodotti" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.dataStoreID;align=left;spacingLeft=3;points=[[0,0],[0.5,0],[1,0],[0,0.5],[1,0.5],[0,1],[0.5,1],[1,1]];" vertex="1" parent="1">
-                    <mxGeometry x="337.5" y="560" width="145" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="42" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="46" target="50">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="43" value="2. Invio comanda" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="42">
-                    <mxGeometry x="-0.2182" y="-1" relative="1" as="geometry">
-                        <mxPoint x="7" y="-11" as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="44" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="46" target="48">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="380" y="480"/>
-                            <mxPoint x="190" y="480"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="45" value="3. Conferma ricezione&lt;br&gt;5. Notifica consegna" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="44">
+                <mxCell id="53" value="4. Esito richiesta" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="52">
                     <mxGeometry x="0.1267" y="-4" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
+                        <mxPoint x="16" y="-6" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="46" value="Sistema di ordini" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="350" y="380" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="47" value="1. Invia ordine" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1">
-                    <mxGeometry x="-0.2727" y="10" relative="1" as="geometry">
-                        <mxPoint x="241" y="410" as="sourcePoint"/>
-                        <mxPoint x="351" y="410" as="targetPoint"/>
-                        <mxPoint as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="48" value="Cliente" style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="140" y="380" width="100" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="49" value="4. Pizza pronta" style="edgeStyle=none;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="50" target="46">
-                    <mxGeometry relative="1" as="geometry">
+                <mxCell id="61" value="2. Query titolo" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="54" target="59">
+                    <mxGeometry x="0.0476" y="10" relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="630" y="480"/>
-                            <mxPoint x="440" y="480"/>
+                            <mxPoint x="540" y="390"/>
                         </Array>
+                        <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="50" value="Cucina" style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="580" y="380" width="100" height="60" as="geometry"/>
+                <mxCell id="54" value="[1.1]&lt;br&gt;Verifica disponibilità" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="365" y="360" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="1. Titolo libro" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="54">
+                    <mxGeometry x="-0.0484" y="10" relative="1" as="geometry">
+                        <mxPoint x="241" y="390" as="sourcePoint"/>
+                        <mxPoint x="351" y="390" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" value="Utente" style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="360" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" value="DATA STORE" style="html=1;dashed=0;whitespace=wrap;shape=partialRectangle;right=0;" vertex="1" parent="1">
+                    <mxGeometry x="560" y="50" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="62" value="3. Stato disponibilità" style="edgeStyle=none;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="59" target="54">
+                    <mxGeometry x="0.0357" y="-10" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="640" y="460"/>
+                            <mxPoint x="455" y="460"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="59" value="D1 Catalogo" style="html=1;dashed=0;whitespace=wrap;shape=partialRectangle;right=0;" vertex="1" parent="1">
+                    <mxGeometry x="590" y="375" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" value="&lt;p data-path-to-node=&quot;4&quot;&gt;&lt;/p&gt;&lt;div&gt;&lt;/div&gt;&lt;span style=&quot;color: rgb(0, 0, 0); background-color: initial;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;b&gt;DFD Level 0 (Contesto)&lt;/b&gt;: Definisce il perimetro. Il sistema è un'unica &quot;scatola nera&quot; [0]. Non sono ammessi Data Store perché l'obiettivo è vedere solo come il mondo esterno interagisce con il sistema.&lt;/span&gt;&lt;/div&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial; color: rgb(102, 102, 0);&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;b&gt;DFD Level 1 (Dettaglio)&lt;/b&gt;: &quot;Esplode&quot; il sistema. Il processo 0 viene sostituito da processi numerati (es. 1.1) e compaiono i Data Store (D1) per mostrare dove i dati vengono salvati o letti.&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;b&gt;Regole di Rappresentazione:&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- &lt;b&gt;Processi&lt;/b&gt;: Usare sempre un Verbo + Nome (es. Verifica disponibilità). Devono sempre avere almeno un input e un output (niente &quot;buchi neri&quot;)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- &lt;b&gt;Entità&lt;/b&gt;: Rappresentano il confine esterno. Non possono mai parlare direttamente con un Data Store (serve sempre un processo nel mezzo)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- &lt;b&gt;Flussi (Frecce)&lt;/b&gt;: Devono contenere solo Nomi (es. Titolo libro). Descrivono &quot;cosa&quot; passa, non &quot;come&quot; lo fa.&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- &lt;b&gt;Data Store&lt;/b&gt;: Rappresentano dati a riposo. Il nome deve essere un sostantivo (es. Catalogo).&lt;/span&gt;&lt;/div&gt;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); background-color: initial;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Tutti i flussi che entrano o escono dal sistema al Livello 0 (es. Richiesta Libro) devono essere presenti anche al Livello 1, per garantire la coerenza dell'analisi.&lt;/span&gt;&lt;/div&gt;&lt;/span&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p style=&quot;background-color: initial; text-align: left;&quot; data-path-to-node=&quot;5,0,0&quot;&gt;&lt;/p&gt;&lt;p data-path-to-node=&quot;8&quot;&gt;&lt;/p&gt;" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" vertex="1" parent="1">
+                    <mxGeometry x="720" y="35" width="350" height="445" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
