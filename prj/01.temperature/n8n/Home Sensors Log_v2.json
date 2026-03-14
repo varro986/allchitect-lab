@@ -1,0 +1,1496 @@
+{
+  "name": "Home Sensors Log_v2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2864,
+        -768
+      ],
+      "id": "68574e55-5b65-4e64-9d08-98d40961c07b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "boZ2VDnr3xsMZE2MIHVPz",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/boZ2VDnr3xsMZE2MIHVPz",
+          "cachedResultName": "Tuya: Get access_token with simple mode"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1296,
+        -768
+      ],
+      "id": "8102ade4-7ead-4b36-8218-4a2445367772",
+      "name": "Tuya: Get access_token with simple mode"
+    },
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "latitude",
+              "value": "={{ $('Set Variables').item.json.OpenMeteo_Latitude }}"
+            },
+            {
+              "name": "longitude",
+              "value": "={{ $('Set Variables').item.json.OpenMeteo_Longitude }}"
+            },
+            {
+              "name": "current",
+              "value": "temperature_2m,relative_humidity_2m,is_day,direct_radiation,precipitation,surface_pressure,wind_speed_10m&timezone=auto"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -624,
+        -1152
+      ],
+      "id": "7cf2e2af-f6b0-4e54-b14a-28834aadbd91",
+      "name": "HTTP Request to Open Meteo"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "38df834f-ec58-4f78-8121-784b16ee9bb6",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1072,
+        -768
+      ],
+      "id": "f0bd2678-6084-4316-8ebf-4582d35fd349",
+      "name": "If Tuya Access Token"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2864,
+        -288
+      ],
+      "id": "18d1433d-5b37-410f-a8a1-70f1453ed83c",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "error",
+            "Message": "={{ $json.execution.error.message }} - {{ $json.execution.error.stack }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -848,
+        -656
+      ],
+      "id": "d84dace1-af5c-4707-ae88-8e40914171f4",
+      "name": "ERROR Unexpected"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "info",
+            "Message": "BEGIN execution"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2640,
+        -768
+      ],
+      "id": "90eb5938-0e1f-44dc-a08a-94084c8ccdba",
+      "name": "Log BEGIN"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "info",
+            "Message": "END execution"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        -960
+      ],
+      "id": "c95b0cff-13af-4fb1-94c7-74818443f37c",
+      "name": "Log END"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.GoogleSheets_DocId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1771267593,
+          "mode": "list",
+          "cachedResultName": "4a.Sensor_Mappings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM/edit#gid=1771267593"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2192,
+        -768
+      ],
+      "id": "950d66e2-17c5-428c-9d20-79a670401fd9",
+      "name": "Get Sensor Mapping",
+      "credentials": {
+        "googleApi": {
+          "id": "Moo5cysToVu6PocY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "Device ID"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1744,
+        -768
+      ],
+      "id": "5fe9d273-5e09-4941-b057-a84c606d0a07",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "2U39dqqzkjOsDnU9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/2U39dqqzkjOsDnU9",
+          "cachedResultName": "Tuya: Get multiple devices data points"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "access_token": "={{ $json.result.access_token }}",
+            "device_ids": "={{ $('Aggregate in one id string comma separated').item.json.idString }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "access_token",
+              "displayName": "access_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "device_ids",
+              "displayName": "device_ids",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -848,
+        -864
+      ],
+      "id": "7bb27088-9889-41be-b9a2-c3d7376ca202",
+      "name": "Call 'Tuya: Get multiple devices data points'"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Nodo: Code in JavaScript\n * Obiettivo: Estrarre Device ID univoci e creare una stringa separata da virgole.\n */\n\n// 1. Recupero l'array dei Device ID dall'input (basato su image_0e87e8.png)\n// Assumiamo che l'input sia l'oggetto \"Aggregate\" mostrato nello screenshot\nconst rawIds = $input.all()[0].json[\"Device ID\"];\n\nif (!Array.isArray(rawIds)) {\n  throw new Error(\"Input non valido: 'Device ID' deve essere un array.\");\n}\n\n// 2. Rimozione duplicati e pulizia (trim)\n// L'uso di Set garantisce l'unicità dei valori\nconst uniqueIds = [...new Set(rawIds.map(id => id.trim()))];\n\n// 3. Creazione dello \"stringone\"\nconst idString = uniqueIds.join(\",\");\n\n// 4. Prospettiva Critica: Controllo dei limiti\n// Tuya Batch Query supporta massimo 20 ID per chiamata.\nconst deviceCount = uniqueIds.length;\nif (deviceCount > 20) {\n  // Nota: n8n non blocca l'esecuzione, ma l'API Tuya restituirà errore.\n  console.warn(`Attenzione: Hai ${deviceCount} ID. Il limite Tuya Batch è 20.`);\n}\n\n// 5. Restituisco l'output in formato n8n\nreturn [\n  {\n    json: {\n      idString: idString,\n      count: deviceCount,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        -768
+      ],
+      "id": "e88cb61f-953e-4566-845b-a6d7b4e8e3d4",
+      "name": "Aggregate in one id string comma separated"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "76da6049-9409-4334-9981-846709ec1fae",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -624,
+        -864
+      ],
+      "id": "fdd1db34-a05d-45d8-853b-50289bd5f55c",
+      "name": "If Tuya get multiple devices"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['Device Producer'] }}",
+                    "rightValue": "Open Meteo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f8728061-d755-47bc-baf3-81e207261f30"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d6ce222c-1019-43c5-8156-de2c232322e7",
+                    "leftValue": "={{ $json['Device Producer'] }}",
+                    "rightValue": "Tuya",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a20eb70d-3601-420b-875b-4d63d6e49c15",
+                    "leftValue": "={{ $json['Device Producer'] }}",
+                    "rightValue": "Shelly",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1968,
+        -784
+      ],
+      "id": "ce0b81d0-529b-450e-aeff-7573606a88d2",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Nodo: Code in JavaScript\n * Obiettivo: Unire i dati grezzi Tuya con il Mapping prelevato da un nodo specifico.\n */\n\n// 1. Recupero dati Tuya (input diretto dal nodo precedente)\nconst tuyaInput = $input.all()[0].json; \nconst tuyaStatus = JSON.parse(tuyaInput.result);\n\n// 2. Recupero Mapping da un nodo specifico (es. \"Get Sensor Mapping\")\nconst mappingData = $(\"Switch\").all().map(item => item.json);\n\n// 3. Elaborazione dell'array sincronizzato\nconst output = mappingData.map(row => {\n  const deviceId = row[\"Device ID\"];\n  const jsonKey = row[\"JSON Key\"];\n  const columnName = row[\"Column name\"];\n  \n  let value = \"not available\";\n\n  // Match su Device ID e JSON Key\n  if (deviceId && tuyaStatus[deviceId]) {\n    const dataPoint = tuyaStatus[deviceId].find(dp => dp.code === jsonKey);\n    \n    if (dataPoint !== undefined) {\n      value = dataPoint.value;\n      \n      // Logica specifica richiesta: divisione per scala differente\n      // temp_set/upper_temp usano solitamente step da 0.5 (valore / 2)\n      // va_temperature/temp_current usano step da 0.1 (valore / 10)\n      if (jsonKey === \"temp_set\" || jsonKey === \"upper_temp\") {\n        value = value / 2;\n      } else if (jsonKey === \"va_temperature\" || jsonKey === \"temp_current\" || jsonKey === \"cur_power\") {\n        value = value / 10;\n      }\n\n      // Prospettiva Critica: Normalizzazione (Moltiplicatore dal Foglio)\n      const multiplier = parseFloat(row[\"Multiplier\"]) || 1;\n      if (typeof value === 'number') value = value * multiplier;\n    }\n  }\n\n  return {\n    \"Column name\": columnName,\n    \"Value\": value\n  };\n});\n\n// 4. Trasformazione in un unico oggetto (Wide Format) per Google Sheets\nconst finalRow = {};\noutput.forEach(item => {\n  finalRow[item[\"Column name\"]] = item[\"Value\"];\n});\n\nreturn { json: finalRow };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -960
+      ],
+      "id": "b0cbc5a4-4924-4661-8c34-9bae4e8fde16",
+      "name": "Get Tuya Values"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a82a23e5-3c4e-4698-bd83-bb92a5f07eee",
+              "name": "GoogleSheets_DocId",
+              "value": "1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM",
+              "type": "string"
+            },
+            {
+              "id": "c2759006-d643-4ff4-b6d6-04f971efe2ea",
+              "name": "OpenMeteo_Latitude",
+              "value": "45.5217",
+              "type": "string"
+            },
+            {
+              "id": "33407c15-d6db-4d6a-8990-d24937f15f3a",
+              "name": "OpenMeteo_Longitude",
+              "value": "9.3109",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2416,
+        -768
+      ],
+      "id": "4f9237ac-4cbc-4652-a585-968244bb2a68",
+      "name": "Set Variables"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Nodo: Code in JavaScript\n * Obiettivo: Estrarre i dati da Open Meteo e mapparli sulle colonne del foglio secondo il Mapping.\n */\n\n// 1. Recupero dati Meteo dal nodo \"Open Meteo\"\nconst meteoInput = $input.all()[0].json;\n\nconst mappingData = $(\"Switch\").all().map(item => item.json);\n\n// 3. Elaborazione della riga sincronizzata\nconst finalRow = {};\n\nmappingData.forEach(row => {\n  const producer = row[\"Device Producer\"];\n  const jsonKey = row[\"JSON Key\"];\n  const columnName = row[\"Column name\"];\n  const multiplier = parseFloat(row[\"Multiplier\"]) || 1;\n  \n  let value = \"not available\";\n\n  // --- LOGICA ESCLUSIVA OPEN METEO ---\n  if (producer === \"Open Meteo\" && meteoInput && meteoInput.current) {\n    // Controllo se la chiave esiste nel blocco 'current' di Open Meteo\n    if (jsonKey && meteoInput.current[jsonKey] !== undefined) {\n      value = meteoInput.current[jsonKey];\n      \n      // Applicazione moltiplicatore se il valore è numerico\n      if (typeof value === 'number') {\n        value = value * multiplier;\n      }\n    }\n  }\n\n  // Popolamento della colonna (mantiene la struttura del foglio anche se vuota)\n  finalRow[columnName] = value;\n});\n\n// 4. Restituzione del record unico (Wide Format)\nreturn { json: finalRow };\n\n/**\n * ANALISI CRITICA:\n * 1. Coerenza Temporale: Questo script usa le chiavi del JSON Open Meteo (es. \"time\") \n * per popolare la colonna \"Timestamp\" se mappata correttamente nel foglio.\n * 2. Estensibilità: Se aggiungi nuovi parametri meteo (es. UV Index o Visibility) \n * nel nodo Open Meteo, ti basterà aggiungere la riga nel foglio Mapping \n * senza tornare a modificare questo codice.\n * 3. Prospettiva Alternativa: Se il nodo Open Meteo dovesse fallire (timeout), \n * lo script restituirà \"not available\" per tutte le colonne, evitando il crash \n * dell'intero workflow di logging.\n */"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -1152
+      ],
+      "id": "6ce57171-7385-46da-b43e-a0a2cf6803d3",
+      "name": "Get OpenMeteo Values"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Set Variables').item.json.GoogleSheets_DocId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1459746361,
+          "mode": "list",
+          "cachedResultName": "4b.Sensors Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM/edit#gid=1459746361"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Timestamp",
+              "lookupValue": "dummy"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        -960
+      ],
+      "id": "9d8ca728-5044-4cf2-a7f7-f9211aa90703",
+      "name": "Get header collection",
+      "credentials": {
+        "googleApi": {
+          "id": "Moo5cysToVu6PocY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Nodo: Code in JavaScript (n8n)\n * Funzione: Allineamento del JSON piatto agli Header reali di Google Sheets.\n * Strategia: Minimalista con inserimento Timestamp corrente.\n */\n\n// 1. RECUPERO INPUT\n// Recuperiamo i dati reali dal nodo \"Merged Data\"\nconst inputData = $(\"Merged Data\").first().json;\n\n// Recuperiamo la riga dummy dal nodo \"Get header collection\"\nconst headersNode = $(\"Get header collection\").first();\n\nif (!headersNode || !headersNode.json) {\n    throw new Error(\"Errore: Il nodo 'Get header collection' non ha restituito dati validi.\");\n}\n\n// Estrazione chiavi filtrando il metadato row_number di n8n\nconst sheetHeaders = Object.keys(headersNode.json).filter(key => key !== 'row_number');\n\n// 2. LOGICA DI ALLINEAMENTO E GENERAZIONE TIMESTAMP\nconst finalizedRow = {};\nconst now = new Date().toISOString(); // Genera il timestamp ISO 8601 attuale\n\nsheetHeaders.forEach(header => {\n    // Se la colonna è il Timestamp, inseriamo l'ora esatta di adesso\n    if (header === \"Timestamp\") {\n        finalizedRow[header] = now;\n    } else {\n        // Altrimenti mappiamo il dato in ingresso o mettiamo null\n        finalizedRow[header] = inputData[header] ?? null;\n    }\n});\n\n// 3. RITORNO DATI\nreturn { json: finalizedRow };\n\n/**\n * PROSPETTIVA CRITICA:\n * Forzare il timestamp di sistema (now) garantisce la linearità del log nel database,\n * ma tieni presente che potrebbe esserci un leggero sfasamento (secondi) rispetto \n * all'istante esatto in cui il sensore ha campionato il dato.\n * Per un Digital Twin con campionamento a 5 minuti, questo scarto è irrilevante.\n */"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        -960
+      ],
+      "id": "a25390d2-cdc7-415d-ba4a-03cda56df4c3",
+      "name": "Create Row"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -176,
+        -976
+      ],
+      "id": "7926c8a4-de8d-4f41-bca2-614b5c5f530a",
+      "name": "Merged Data"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Set Variables').item.json.GoogleSheets_DocId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1459746361,
+          "mode": "list",
+          "cachedResultName": "4b.Sensors Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pr2objUEY5A9Y4M3sWiGRY3oZ2LL2e2VEDQ1LBFy7lM/edit#gid=1459746361"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Temperature (°C)",
+              "displayName": "Meteo - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Humidity (%)",
+              "displayName": "Meteo - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Is Day",
+              "displayName": "Meteo - Is Day",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Direct Radiation (W/m2)",
+              "displayName": "Meteo - Direct Radiation (W/m2)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Precipitation (mm)",
+              "displayName": "Meteo - Precipitation (mm)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Pressure",
+              "displayName": "Meteo - Pressure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meteo - Wind Speed (km/h)",
+              "displayName": "Meteo - Wind Speed (km/h)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Termostato - Temperature (°C)",
+              "displayName": "PT - Termostato - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Termostato - Temperature set point (°C)",
+              "displayName": "PT - Termostato - Temperature set point (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Termometro Cucina - Temperature (°C)",
+              "displayName": "PT - Termometro Cucina - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Termometro Cucina - Humidity (%)",
+              "displayName": "PT - Termometro Cucina - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Termometro Salone - Temperature (°C)",
+              "displayName": "PT - Termometro Salone - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Termometro Salone - Humidity (%)",
+              "displayName": "PT - Termometro Salone - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "P1 - Termostato - Temperature (°C)",
+              "displayName": "P1 - Termostato - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "P1 - Termostato - Temperature set point (°C)",
+              "displayName": "P1 - Termostato - Temperature set point (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "P1 - Termometro Camera Patronale - Temperature (°C)",
+              "displayName": "P1 - Termometro Camera Patronale - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "P1 - Termometro Camera Patronale - Humidity (%)",
+              "displayName": "P1 - Termometro Camera Patronale - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "P1 - Termometro Cameretta - Temperature (°C)",
+              "displayName": "P1 - Termometro Cameretta - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "P1 - Termometro Cameretta - Humidity (%)",
+              "displayName": "P1 - Termometro Cameretta - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Termostato - Temperature (°C)",
+              "displayName": "Mansarda - Termostato - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Termostato - Temperature set point (°C)",
+              "displayName": "Mansarda - Termostato - Temperature set point (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Termometro Camera Ospiti - Temperature (°C)",
+              "displayName": "Mansarda - Termometro Camera Ospiti - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Termometro Camera Ospiti - Humidity (%)",
+              "displayName": "Mansarda - Termometro Camera Ospiti - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Temometro Studiolo - Temperature (°C)",
+              "displayName": "Mansarda - Temometro Studiolo - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Termometro Studiolo - Humidity (%)",
+              "displayName": "Mansarda - Termometro Studiolo - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Taverna - Termostato - Temperature (°C)",
+              "displayName": "Taverna - Termostato - Temperature (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Taverna - Termostato - Temperature set point (°C)",
+              "displayName": "Taverna - Termostato - Temperature set point (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giardino Sud - Igrometro - Temperatura (°C)",
+              "displayName": "Giardino Sud - Igrometro - Temperatura (°C)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giardino Sud - Igrometro - Humidity (%)",
+              "displayName": "Giardino Sud - Igrometro - Humidity (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PT - Pinza amperometrica",
+              "displayName": "PT - Pinza amperometrica",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Presa Studiolo",
+              "displayName": "Mansarda - Presa Studiolo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mansarda - Schermo Studiolo",
+              "displayName": "Mansarda - Schermo Studiolo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        -960
+      ],
+      "id": "63273ee3-43fe-4486-acb8-20e4c3df4d8a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Moo5cysToVu6PocY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "7VV1ftpALEFzZwxp",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/7VV1ftpALEFzZwxp",
+          "cachedResultName": "Shelly: Get device data"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "deviceId": "={{ $json[\"Device ID\"] }}"
+          },
+          "matchingColumns": [
+            "deviceId"
+          ],
+          "schema": [
+            {
+              "id": "deviceId",
+              "displayName": "deviceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -624,
+        -512
+      ],
+      "id": "ee3db0b1-b1ab-4618-bf75-06bc732bf141",
+      "name": "Call 'Shelly: Get device data'"
+    },
+    {
+      "parameters": {
+        "content": "## Shelly\n**Double click** to edit me. OK because of i have just one Shelly device, to be changed in the future"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2096,
+        -640
+      ],
+      "id": "c2d8d275-8425-4047-bc42-4672ca8de826",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Recupera la configurazione (path e nome colonna) dal nodo \"Switch\"\nconst config = $('Switch').item.json;\nconst path = config[\"JSON Key\"];\nconst columnName = config[\"Column name\"];\n\n// 2. Funzione per navigare nel JSON dello Shelly usando la stringa del path\nconst getValue = (obj, pathString) => {\n  return pathString.split('.').reduce((acc, part) => {\n    // Gestisce i casi con array come emeters[0]\n    const arrayMatch = part.match(/(\\w+)\\[(\\d+)\\]/);\n    if (arrayMatch) {\n      return acc[arrayMatch[1]][arrayMatch[2]];\n    }\n    return acc[part];\n  }, obj);\n};\n\n// 3. Mappa l'input attuale dello Shelly usando i dati di configurazione\nreturn $input.all().map(item => {\n  return {\n    json: {\n      [columnName]: getValue(item.json, path)\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -512
+      ],
+      "id": "986812c3-312c-44c1-9b31-0b1a76968459",
+      "name": "Get Shelly Value"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "error",
+            "Message": "={{ $json.execution.error.message }} - {{ $json.execution.error.stack }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2640,
+        -288
+      ],
+      "id": "4752dbb1-ea65-4792-9fc5-8a8b0ec9fba1",
+      "name": "ERROR Unexpected1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NuEHg10VS1cVEq885Rul9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NuEHg10VS1cVEq885Rul9",
+          "cachedResultName": "Loki: Push Log"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "WorkFlow Name": "Temperature",
+            "Level": "error",
+            "Message": "={{ $json.execution.error.message }} - {{ $json.execution.error.stack }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "WorkFlow Name",
+              "displayName": "WorkFlow Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Level",
+              "displayName": "Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -400,
+        -768
+      ],
+      "id": "fa1b81a9-f6b3-4018-af59-c1dead6e34bf",
+      "name": "ERROR Unexpected2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log BEGIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuya: Get access_token with simple mode": {
+      "main": [
+        [
+          {
+            "node": "If Tuya Access Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request to Open Meteo": {
+      "main": [
+        [
+          {
+            "node": "Get OpenMeteo Values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Tuya Access Token": {
+      "main": [
+        [
+          {
+            "node": "Call 'Tuya: Get multiple devices data points'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ERROR Unexpected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "ERROR Unexpected1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log BEGIN": {
+      "main": [
+        [
+          {
+            "node": "Set Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log END": {
+      "main": [
+        []
+      ]
+    },
+    "ERROR Unexpected": {
+      "main": [
+        []
+      ]
+    },
+    "Get Sensor Mapping": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Aggregate in one id string comma separated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Tuya: Get multiple devices data points'": {
+      "main": [
+        [
+          {
+            "node": "If Tuya get multiple devices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate in one id string comma separated": {
+      "main": [
+        [
+          {
+            "node": "Tuya: Get access_token with simple mode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Tuya get multiple devices": {
+      "main": [
+        [
+          {
+            "node": "Get Tuya Values",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ERROR Unexpected2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request to Open Meteo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'Shelly: Get device data'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Variables": {
+      "main": [
+        [
+          {
+            "node": "Get Sensor Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get OpenMeteo Values": {
+      "main": [
+        [
+          {
+            "node": "Merged Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Tuya Values": {
+      "main": [
+        [
+          {
+            "node": "Merged Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get header collection": {
+      "main": [
+        [
+          {
+            "node": "Create Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merged Data": {
+      "main": [
+        [
+          {
+            "node": "Get header collection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Row": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Log END",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Shelly: Get device data'": {
+      "main": [
+        [
+          {
+            "node": "Get Shelly Value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Shelly Value": {
+      "main": [
+        [
+          {
+            "node": "Merged Data",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "62a2db73-e89e-464f-9181-4031e5ae4066",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3925f173e8cd2d6118234946561e074191b6fa651e57d50986c498491cb14d3e"
+  },
+  "id": "IIGb99UXf8BFMWPS",
+  "tags": []
+}

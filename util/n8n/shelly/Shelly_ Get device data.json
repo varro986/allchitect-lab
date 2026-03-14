@@ -1,0 +1,181 @@
+{
+  "name": "Shelly: Get device data",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "deviceId"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -736,
+        -976
+      ],
+      "id": "954b9d2a-5cf6-48fc-8173-9ffeaa2a568c",
+      "name": "Calling Workflow",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.baseUrl }}/device/status",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "48e72968e91b"
+            },
+            {
+              "name": "auth_key",
+              "value": "={{ $json.authkey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -64,
+        -976
+      ],
+      "id": "e10047ec-d37b-4469-a263-7fcac52e3e02",
+      "name": "HTTP Request to Get info"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "069cd5b9-2647-4076-b9f0-c5f87eee13be",
+              "name": "baseUrl",
+              "value": "={{ $items(\"Get shelly configs\").find(item => item.json.Key === 'shelly_baseUrl').json.Value }}",
+              "type": "string"
+            },
+            {
+              "id": "df906480-86be-4c7b-a5e8-7ddb598b1f7b",
+              "name": "authkey",
+              "value": "={{ $items(\"Get shelly configs\").find(item => item.json.Key === 'shelly_authkey').json.Value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        -976
+      ],
+      "id": "55500043-700c-465c-acb1-67f2c69040c4",
+      "name": "Init",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "sJSj6RhQbEODoCRL",
+          "mode": "list",
+          "cachedResultName": "Configs",
+          "cachedResultUrl": "/projects/Enln3fb9c022j0uw/datatables/sJSj6RhQbEODoCRL"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Key",
+              "keyValue": "shelly_authkey"
+            },
+            {
+              "keyName": "Key",
+              "keyValue": "shelly_baseUrl"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -512,
+        -976
+      ],
+      "id": "77858cbd-4e73-4048-a3e3-79c3664332ac",
+      "name": "Get shelly configs"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Calling Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get shelly configs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request to Get info": {
+      "main": [
+        []
+      ]
+    },
+    "Init": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request to Get info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get shelly configs": {
+      "main": [
+        [
+          {
+            "node": "Init",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "31210c84-1ae0-4102-8363-f0c1e85a5ebb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3925f173e8cd2d6118234946561e074191b6fa651e57d50986c498491cb14d3e"
+  },
+  "id": "7VV1ftpALEFzZwxp",
+  "tags": [
+    {
+      "updatedAt": "2026-03-13T18:35:16.215Z",
+      "createdAt": "2026-03-13T18:35:16.215Z",
+      "id": "ZL1T3nn0hj3l3g4z",
+      "name": "shelly"
+    },
+    {
+      "updatedAt": "2026-02-08T11:40:54.445Z",
+      "createdAt": "2026-02-08T11:40:54.445Z",
+      "id": "itQNKRPcunsLbAkb",
+      "name": "util"
+    }
+  ]
+}
