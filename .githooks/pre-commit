@@ -1,0 +1,5 @@
+#!/bin/sh
+# pre-commit - blocca il commit se gitleaks trova secret nei file in stage.
+# Copiato in .git/hooks/ da PC-Windows/Maintenance/install.ps1.
+command -v gitleaks >/dev/null 2>&1 || { echo "gitleaks non trovato: winget install -e --id Gitleaks.Gitleaks"; exit 1; }
+exec gitleaks git --pre-commit --staged --redact --no-banner -v

@@ -1,0 +1,33 @@
+title = "allchitect-lab"
+
+[extend]
+useDefault = true
+
+# Regole su misura: dati personali che le regole di default non vedono
+# (il repo e' pubblico e accompagna i post del Substack).
+
+[[rules]]
+id = "geo-coordinates"
+description = "Coordinate con 3+ decimali (~100 m): possono indicare casa. Usa 99.9 o al massimo 1 decimale"
+regex = '''(?i)(?:"name"\s*:\s*"[^"]*(?:lat|lon|lng)[^"]*"\s*,\s*"value"\s*:\s*"|\b(?:lat|latitude|lon|lng|longitude)\s*[=:]\s*)-?\d{1,3}\.\d{3,}'''
+
+[[rules]]
+id = "google-doc-id"
+description = "ID di un documento Google (Sheets/Docs/Drive): usa un placeholder"
+regex = '''\b1[A-Za-z0-9_-]{43}\b'''
+
+[[rules]]
+id = "device-id"
+description = "ID/MAC di un dispositivo (Shelly, Tuya...) scritto in chiaro: spostalo nella config"
+regex = '''(?i)"name"\s*:\s*"(?:id|device_?id|mac)"\s*,\s*"value"\s*:\s*"[0-9a-z]{8,}"'''
+
+[[rules]]
+id = "inline-password"
+description = "Password in chiaro in attributi XML/config"
+regex = '''(?i)\bpassword\s*=\s*"[^"$\s{]{4,}"'''
+[[rules.allowlists]]
+description = "segnaposto"
+regexes = ['''CHANGE_ME''']
+
+# Nota: in modalita' git (pre-commit e CI) gitleaks salta i binari, zip compresi.
+# Per controllare dentro gli archivi: gitleaks dir . --max-archive-depth 2

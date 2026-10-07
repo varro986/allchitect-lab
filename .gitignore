@@ -1,0 +1,34 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userprefs
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+TestResults/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# draw.io backups
+*.drawio.bkp
+.$*.drawio*
